@@ -177,7 +177,7 @@ const [connection, SetConnection] = useState(null);
          <img src={Kish_light_Logo} alt="logo" width="210"/>
          </div>
         <Typography component="h1" variant="h5">
-        <Box sx={{ fontWeight: 'bold', m: 1 }}> כניסה למערכת דחופים</Box>
+        <Box sx={{ fontWeight: 'bold', m: 1 }}> בדיקה כניסה למערכת דחופים</Box>
         </Typography>
         
         <form onSubmit={handleSubmit} className={classes.form} noValidate>
