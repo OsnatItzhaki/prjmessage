@@ -1,11 +1,12 @@
 import axios from   "axios";
+const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
 class automaticSendingService{
 
     async  fetchListSmsForAutomaticSend(clientCode){
     
     const cancelTokenSource = axios.CancelToken.source();
 
-    const data= await  axios.get('http://localhost:57143/api/AutomaticSending/Get',{
+    const data= await  axios.get(`${HOST_API}/api/AutomaticSending/Get`,{
         params: {
             clientCode:clientCode 
         }, cancelToken: cancelTokenSource.token
@@ -22,7 +23,7 @@ class automaticSendingService{
             let responseObj={iserror:false,data:""}
             const tracking = await axios({
                 method: 'post',
-                url: 'http://localhost:57143/api/AutomaticSending/post',
+                url: `${HOST_API}/api/AutomaticSending/post`,
                 headers: {'Content-Type': 'application/json'},
                        
                 data: JSON.stringify(object)  ,// This is the body part

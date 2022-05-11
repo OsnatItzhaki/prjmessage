@@ -177,8 +177,6 @@ const style = {
     
       setData(smsData);
 
-      
-    
     }
   
     init()

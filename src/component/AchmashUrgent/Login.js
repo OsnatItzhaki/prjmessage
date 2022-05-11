@@ -112,9 +112,9 @@ const [connection, SetConnection] = useState(null);
    
     
    try {
+    const HOST_SIGNALR = process.env.REACT_APP_HOST_SIGNALR_KEY || '';
      
-      let localConnection = window.$.hubConnection("http://localhost:57142");
-    //let localConnection = window.$.hubConnection("http://10.0.0.115/WS_Local_Kishurit");
+      let localConnection = window.$.hubConnection(`${HOST_SIGNALR}`);
      localConnection.qs = { 'version': '1.0' };
      var hubProxy = localConnection.createHubProxy('chathub');
      hubProxy.on('SendNewRecords', function (eventName, data) {
@@ -177,7 +177,7 @@ const [connection, SetConnection] = useState(null);
          <img src={Kish_light_Logo} alt="logo" width="210"/>
          </div>
         <Typography component="h1" variant="h5">
-        <Box sx={{ fontWeight: 'bold', m: 1 }}> בדיקה כניסה למערכת דחופים</Box>
+        <Box sx={{ fontWeight: 'bold', m: 1 }}> כניסה למערכת דחופים</Box>
         </Typography>
         
         <form onSubmit={handleSubmit} className={classes.form} noValidate>

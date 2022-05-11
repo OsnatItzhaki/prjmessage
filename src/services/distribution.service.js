@@ -1,4 +1,5 @@
 import axios from   "axios";
+const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
 class distributionService{
 
 
@@ -10,7 +11,7 @@ class distributionService{
         console.log("fetchDistributionType service");
         const cancelTokenSource = axios.CancelToken.source();
 
-            const data= await  axios.get('http://localhost:57143/api/Distribution/Get',{
+            const data= await  axios.get(`${HOST_API}/api/Distribution/Get`,{
                 cancelToken: cancelTokenSource.token
               })
             .then(({data})=>data)
@@ -30,7 +31,7 @@ class distributionService{
         
         const cancelTokenSource = axios.CancelToken.source();
 
-            const data= await  axios.get('http://localhost:57143/api/Distribution/Get',{
+            const data= await  axios.get(`${HOST_API}/api/Distribution/Get`,{
                 params: {
                     messageCode:messageCode
                 }, cancelToken: cancelTokenSource.token
@@ -48,7 +49,7 @@ class distributionService{
             let responseObj={iserror:false,data:""}
             const tracking = await axios({
                 method: 'post',
-                url: 'http://localhost:57143/api/Distribution/post',
+                url: `${HOST_API}/api/Distribution/post`,
                 headers: {'Content-Type': 'application/json'},
                        
                 data: JSON.stringify(saveObject)  ,// This is the body part
@@ -80,7 +81,7 @@ class distributionService{
         
             const cancelTokenSource = axios.CancelToken.source();
     
-                const data= await  axios.get('http://localhost:57143/api/Distribution/Get',{
+                const data= await  axios.get(`${HOST_API}/api/Distribution/Get`,{
                     params: {
                         messageCode:messageCode,
                         flag:1

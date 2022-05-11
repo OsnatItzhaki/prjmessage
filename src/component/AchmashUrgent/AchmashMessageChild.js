@@ -20,6 +20,8 @@ import Kish_light_Logo from '../../img/logoLight.jpg';
   const [iframeforModal,setiframeforModal]=useState('');
   const [messageforModal,setmessageforModal]=useState('');
 
+ 
+
    useEffect(() => {
 
     const init =  () => {

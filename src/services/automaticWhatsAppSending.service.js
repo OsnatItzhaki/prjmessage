@@ -1,11 +1,12 @@
 import axios from   "axios";
+const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
 class automaticWhatsAppSendingService{
 
     async  fetchListWhatsAppForAutomaticSend(clientCode){
     console.log("fetchListSmsForAutomaticSend service");
     const cancelTokenSource = axios.CancelToken.source();
     
-     const data= await  axios.get('http://localhost:57143/api/AutomaticWhatsAppSending/Get',{
+     const data= await  axios.get(`${HOST_API}/api/AutomaticWhatsAppSending/Get`,{
       //const data= await  axios.get('/WS_Local_Kishurit/api/AutomaticWhatsAppSending/Get',{
         params: {
             clientCode:clientCode 
@@ -22,7 +23,7 @@ class automaticWhatsAppSendingService{
             let responseObj={iserror:false,data:""}
             const tracking = await axios({
                 method: 'post',
-                url: 'http://localhost:57143/api/AutomaticWhatsAppSending/post',
+                url: `${HOST_API}/api/AutomaticWhatsAppSending/post`,
                 headers: {'Content-Type': 'application/json'},
                        
                 data: JSON.stringify(object)  ,// This is the body part
