@@ -49,7 +49,7 @@
 	border: 1px solid #9e9e9f;
 	border-radius: 5px;
 	padding: 20px;
-	margin: 20px 0;
+	margin: 20px;
 }
 .logo{
     background: #464648;
@@ -60,8 +60,11 @@
 }
 
 .frameUrgent{
-    max-height: 300px;
+    max-height: 400px;
     overflow:auto;
+    /* margin-left:200px;
+margin-right:200px; */
+    
 }
 .separator{padding: 20px 0;}
 .btn{
@@ -70,6 +73,7 @@
 	font-size: 16px;
 	height: 34px;
 	font-family: 'Alef Bold', Arial, sans-serif;
+  
 }
 .greenbtn{
     background: #abc42f;
@@ -89,47 +93,51 @@
 	font-size: 18px;
 	height: auto;
 }
-.borderUrgent{
-    border-style: solid;
-    border-width: 3px;
+/* .borderUrgent{
+    /* border-style: solid;
+    border-width: 3px; */
    
 
-}
+/* } */ */
 .footer{
 	padding: 20px 0 30px;
-	background: #464648;
-	border-top: 5px solid #6bc0b2;
-	color: #fff;
+	background:black;
+	border-top: 5px solid #e0871b;
 	font-size: 18px;
 	position: relative;
 	bottom: 0;
 	right: 0;
 	left: 0;
-	min-height: 90px;
+	min-height: 50px;
 }
 
-.footer a{
+/* .footer a{
 	color: #fff;
-}
+} */
 .bluebtn{
     background:#6bc0b2;
 }
 
   .containerMessage{
-    background: rgb(238, 237, 237);
+    background: #efefef;
 padding-top:20px;
 padding-bottom: 20px;
 max-height: 300px;
 display: flex;
+/* margin-left:200px;
+margin-right:200px; */
+
+
+
     
     
 }
   
   .thankYouBox {
     
-   
+    
     text-align: center;
-    border: 5px solid #ffffff;
+    border: 3px solid #aac22f;
     justify-content: center;
 
   }
@@ -145,7 +153,6 @@ display: flex;
   
   .borderText {
     background: rgb(238, 237, 237);
-    
     color: black;
     padding-left: 1vw;
     padding-right: 1vw;
@@ -153,9 +160,60 @@ display: flex;
     margin-top: -10px;
     margin-left: 85%;
   }
+
+  
   
 
   
   * {
     box-sizing: border-box;
+    
   }
+
+  
+@keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+.animate-flicker {
+   -webkit-animation: flickerAnimation .5s infinite;
+   -moz-animation: flickerAnimation .5s infinite;
+   -o-animation: flickerAnimation .5s infinite;
+    animation: flickerAnimation .5s infinite;
+}
+html {
+  height: 100%; 
+ }
+ 
+ body {
+   height: 100%; 
+   padding-bottom: 30px;           
+ }
+ 
+ /* .footer {
+   position: absolute;
+   bottom: 0;
+   left: 0;
+   width: 100%;
+   height: 10px;
+ } */
+
+ @media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}.row{margin-right:-15px;margin-left:-15px}
+
+ 

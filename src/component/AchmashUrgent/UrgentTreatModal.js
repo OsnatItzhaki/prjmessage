@@ -24,6 +24,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import { alignProperty } from '@mui/material/styles/cssUtils';
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
 
 const style = {
   position: 'absolute',
@@ -221,7 +222,9 @@ const deleteAllDistributionItems=(event)=>{
   
   return (
       <div>
-         <button className="btn bluebtn big" onClick={handleOpen}  > טיפול בדחוף</button>
+          <div className="col-3"></div>
+        <Button endIcon={<PriorityHighIcon />}  variant="contained" onClick={handleOpen} sx={{backgroundColor:'#6bc0b2','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}} >טיפול בדחוף</Button>
+
            {/* <Button onClick={handleOpen}>טיפול בדחוף</Button> */}
        <Modal
         open={open}

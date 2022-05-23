@@ -5,15 +5,22 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import IconButton from '@mui/material/IconButton';
+import { spacing } from '@mui/system';
+import ZoomOutMapIcon from '@mui/icons-material/ZoomOutMap';
+
 const style = {
   position: 'absolute',
   top: '10%',
   height: '75%',  
-   width: 1,
+  width: '50%',
+   mx:60,
+ 
   bgcolor: 'background.paper',
   border: '2px solid #000',
   p: 4,
   overflow:'scroll',
+ 
+ 
 };
 
 export default function CustModal(props) {
@@ -24,16 +31,18 @@ export default function CustModal(props) {
 
   return (
     <div>
-       <IconButton onClick={handleOpen} aria-label="zoom in" size="large">
-        <ZoomInIcon fontSize="inherit"/>
-      </IconButton>
+       <IconButton onClick={handleOpen} aria-label="zoom in" size="large"  sx={{color:'#e0871b'}}  >
+        <ZoomOutMapIcon  fontSize="inherit" />
+      </IconButton> 
       <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        
       >
-        <Box dir="rtl" sx={style} dangerouslySetInnerHTML={{ __html:props.content}}>
+
+        <Box  dir="rtl" sx={style} dangerouslySetInnerHTML={{ __html:props.content}} >
           {/* <Typography id="modal-modal-title" variant="h6" component="h2">
             Text in a modal
           </Typography>

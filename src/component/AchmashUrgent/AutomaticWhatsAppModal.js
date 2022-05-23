@@ -17,6 +17,8 @@ import Modal from '@mui/material/Modal';
 import {useState,useEffect} from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
+
 
 
 const ITEM_HEIGHT = 48;
@@ -169,7 +171,8 @@ const style = {
 
   return (
       <div>
-           <Button onClick={handleOpen}> משלוח וואטסאפ</Button>
+        
+           <Button endIcon={<WhatsAppIcon />} variant="contained"onClick={handleOpen} sx={{backgroundColor:'#6bc0b2','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}} >משלוח וואטסאפ</Button>
        <Modal
         open={open}
         onClose={handleClose}

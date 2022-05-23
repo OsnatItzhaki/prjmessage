@@ -17,6 +17,9 @@ import {setChatHubProxy} from "../../redux/actions/hubConnection.action"
 import {setconnectedusers,setconnectId} from "../../redux/actions/login.action"
 import { setMessages,setMessagesByMessageCode } from "../../redux/actions/mainUrgentTable.action";
 import {connect} from 'react-redux' ;
+import Header from '../common/header';
+import Footer1 from '../common/footer';
+import Element2 from '../../img/element2.png'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -169,21 +172,23 @@ const [connection, SetConnection] = useState(null);
 
   const classes = useStyles();
   return(
-    <div>
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <div className='hhh'  style={{marginBottom: '11px'}}>
-         <img src={Kish_light_Logo} alt="logo" width="210"/>
-         </div>
-        <Typography component="h1" variant="h5">
-        <Box sx={{ fontWeight: 'bold', m: 1 }}> כניסה למערכת דחופים</Box>
+    
+    <div >
+      <Header/>
+   
+    <Container component="main" maxWidth="xs" sx={{position: 'fixed',top:'45%',left: '50%',transform: 'translate(-50%, -50%)',border: "0.1px solid #464648",borderRadius:10,pb:10}} >
+      <CssBaseline  />
+      <div className={classes.paper} >
+        
+        <Typography component="h1" variant="h5" >
+        <Box sx={{ fontWeight: 'bold', m: 1 }} > כניסה למערכת דחופים</Box>
         </Typography>
         
-        <form onSubmit={handleSubmit} className={classes.form} noValidate>
-          <TextField
+        <form onSubmit={handleSubmit} className={classes.form} noValidate sx={{}} >
+          <TextField 
             error={errorUsername}
-            variant="outlined"
+            variant="filled" 
+            color="warning"
             margin="normal"
             required
             fullWidth
@@ -195,11 +200,13 @@ const [connection, SetConnection] = useState(null);
             id="username"
             label="שם משתמש"
             name="username"
+            
            
           />
           <TextField
             error={errorPassword}
-            variant="outlined"
+            variant="filled" 
+            color="warning"
             margin="normal"
             required
             fullWidth
@@ -216,7 +223,7 @@ const [connection, SetConnection] = useState(null);
           />
           <div style={{marginTop: '20px'}}>
           <Loading loading={loading}/>
-          <Button
+          <Button sx={{backgroundColor:'#aac22f','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}
             disabled={isButtonDisable}
             type="submit"
             fullWidth
@@ -234,6 +241,7 @@ const [connection, SetConnection] = useState(null);
                 alertMessage={alertMessage}
                 setAlertMessage={setAlertMessage}
             />
+            <Footer1/>
     </div>
   )
 }

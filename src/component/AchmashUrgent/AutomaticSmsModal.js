@@ -30,6 +30,7 @@ import AddIcon from '@mui/icons-material/Add';
 import IconButton from '@mui/material/IconButton';
 import { alignProperty } from '@mui/material/styles/cssUtils';
 import { useNavigate  } from 'react-router-dom';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -188,7 +189,8 @@ const style = {
 
   return (
       <div>
-           <Button onClick={handleOpen}> משלוח אוטמטי</Button>
+        
+           <Button endIcon={<MailOutlineIcon />}  variant="contained"onClick={handleOpen} sx={{backgroundColor:'#6bc0b2','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}} >משלוח אוטמטי</Button>
        <Modal
         open={open}
         onClose={handleClose}

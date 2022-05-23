@@ -1,4 +1,4 @@
-
+import { keyframes } from "@emotion/core";
 import React, { useEffect ,useState} from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -26,7 +26,11 @@ import Box from '@mui/material/Box';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Blink from "react-blink";
+import Header from "../common/header";
+import Footer1 from "../common/footer";
 import { red } from "@mui/material/colors";
+import Element from '../../img/element.png'
+
  function UrgetTable(props) {
 const [chatHubProxy, SetChatHubProxy] = useState(null);
 const [connection, SetConnection] = useState(null);
@@ -65,7 +69,7 @@ let navigate = useNavigate();
   },[])
 
 
-   async function Connect() {
+   async function Connect () {
      try{
       await props.fetchMessages();
      }
@@ -125,43 +129,53 @@ let navigate = useNavigate();
   /////end function
   return (
     
-    <div dir="rtl">
+    <div dir="rtl" >
     
+     <Header/>
      
-      <div  style={{top: 0, position: 'sticky',backgroundColor:'white'}}>
+      <div  style={{top: 0, position: 'sticky',backgroundColor:'white',position: 'relative',
+    minHeight: '100%'}}>
         {/* //className="col-12" */}
-        <Grid container spacing={2}>
-  <Grid item xs={10} mt={3} mb={3}>
-  <h1>מסך דחופים</h1>
-  {hasTretmentPriority()? <WarningAmberIcon fontSize="large"/>:''}
+        <Grid container spacing={2} >
+  <Grid item xs={10} mt={1} mb={0} >
+  
+  {hasTretmentPriority()? <div class="animate-flicker">
+<p>שימו לב לקדימות דחופים<WarningAmberIcon style={{ color: "#e0871b" ,fontSize: "35px"}}  /></p></div>:'' } 
+  
+
+  
+  
+  
   {/* <Blink>akuo</Blink> */}
   </Grid>
-  <Grid item  mt={5} mb={3} xs={2}>
-  <Button onClick={logOut} variant="contained">התנתק</Button>
-  <AccountCircleIcon/>{props.user.userName}
-
+  <Grid item  mt={5} mb={3} xs={2} >
+  
+  {/* <Button sx={{ mx: "auto", width: 200,backgroundColor: '#e0871b' }} onClick={logOut} variant="contained">התנתק </Button> */}
+  {/* <div style={{  position: 'absolute',right: '40px',top: '50px', fontWeight:'bold'}}>
+  <AccountCircleIcon sx={{color: '#6bc0b2'}} />{props.user.userName}
+</div> */}
   </Grid>
   </Grid>
         
         </div>
       
-        <Grid container spacing={2}>
+        <Grid container spacing={2}  >
         <Grid item xs={10} >
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-      <TableContainer sx={{ maxHeight: 1000 }}>
-      <Table sx={{ minWidth: 650 }} stickyHeader aria-label="sticky table" >
-        <TableHead >
-          <TableRow sx={{fontWeight:'bold!important'  }}>
-            <TableCell align="right">מס' מנוי</TableCell>
-            <TableCell align="right">שם מנוי</TableCell>
-            <TableCell align="right">שם מוקדן</TableCell>
-            <TableCell align="right">מס' הודעה</TableCell>
-            <TableCell align="right">זמן המתנה לטיפול</TableCell>
-            <TableCell align="right">מטפל בדחוף</TableCell>
-            <TableCell align="right">טופל</TableCell>
+        <Paper sx={{ width: '100%', overflow: 'hidden ' }} style={{backgroundImage: `url(${Element})`,backgroundPosition: ('center center'),backgroundRepeat: ('no-repeat'), backgroundsize: 'cover', backgroundSize:'contain'}}>
+      <TableContainer sx={{ maxHeight: 650 }} >
+      <Table  size='small' sx={{ minWidth: 700 }} stickyHeader aria-label="sticky table" >
+        <TableHead>
+          <TableRow  sx={{fontWeight:'bold!important'}} >
+            <TableCell align="center" style={{fontWeight:'bold'}}>מס' מנוי</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}} >שם מנוי</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>שם מוקדן</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>מס' הודעה</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>זמן המתנה לטיפול</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>מטפל בדחוף</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>טופל</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        <TableBody  >
           {props.messages
           .sort(function (a, b) {
             //return((a.Handled_Bit === b.Handled_Bit)? 0 : a.Handled_Bit? 1 : -1);
@@ -183,17 +197,17 @@ let navigate = useNavigate();
             <TableRow
               key={row.MessageCode_Vch}
              
-              sx={{background:row.TreatmentPriority_Bit&&!row.Handled_Bit?'#F6D6CE':'', '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{background:row.TreatmentPriority_Bit&&!row.Handled_Bit?'#aac22f':'', '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={handleClickRow.bind(this,index)}
               
             >
-              <TableCell align="right">{row.ClientNo_Int}</TableCell>
-              <TableCell align="right">{row.ClientName_Vch}</TableCell>
-              <TableCell align="right">{row.EmployeName_Int}</TableCell>
-              <TableCell align="right">{row.MessageCodeCust}</TableCell>
-              <TableCell align="right">{row.Handled_Bit? format(new Date(row.OpeningDate_Dat),'dd/MM/yyyy HH:mm:ss'): setTimeDiff(row.OpeningDate_Dat)}</TableCell>
-              <TableCell align="right">{row.Color_Vch}</TableCell>
-              <TableCell align="right"><Checkbox  defaultChecked={row.Handled_Bit}/></TableCell>
+              <TableCell align="center" >{row.ClientNo_Int}</TableCell>
+              <TableCell align="center">{row.ClientName_Vch}</TableCell>
+              <TableCell align="center">{row.EmployeName_Int}</TableCell>
+              <TableCell align="center">{row.MessageCodeCust}</TableCell>
+              <TableCell align="center">{row.Handled_Bit? format(new Date(row.OpeningDate_Dat),'dd/MM/yyyy HH:mm:ss'): setTimeDiff(row.OpeningDate_Dat)}</TableCell>
+              <TableCell align="center">{row.Color_Vch}</TableCell>
+              <TableCell align="center"><Checkbox  defaultChecked={row.Handled_Bit}/></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -205,22 +219,25 @@ let navigate = useNavigate();
      
     <Grid container spacing={3} >
     <Grid item xs={12} >
-    <h5 style={{ padding: "20px 1px 5px 1px"}}> משתמשים המחוברים כעת למערכת</h5>
+    <h6 style={{ padding: "20px 1px 5px 25px"}}> משתמשים המחוברים כעת למערכת</h6>
     
   </Grid>
     {props.connectedUser
           .map((row,index) => (
   <Grid item xs={12} key={index}>
-    {row.UserName!=props.user.userName?<Item style={{ padding: "10px 20px"}}><AccountCircleIcon/>{row.UserName}</Item>:''}
+    {row.UserName!=props.user.userName?<Item style={{ padding: "10px 20px", backgroundColor:'#aac22f',  marginLeft: '30px'}}><AccountCircleIcon/>{row.UserName}</Item>:''}
     
   </Grid>
  
           ))}
+          
     </Grid>
     </Grid>
+   
     </Grid>
+    <Footer1 />
     </div>
-  );
+  )
 }
 
 export default connect(
