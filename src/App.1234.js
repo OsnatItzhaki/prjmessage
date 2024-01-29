@@ -12,6 +12,7 @@ import createCache from '@emotion/cache';
 import { useHistory ,BrowserRouter,Routes,Redirect,Route,Navigate} from 'react-router-dom';
 import Login from './component/AchmashUrgent/Login';
 import {connect} from 'react-redux' ;
+
 const theme = createTheme({
     direction: 'rtl', // Both here and <body dir="rtl">
   });
@@ -21,7 +22,11 @@ const theme = createTheme({
     stylisPlugins: [prefixer, rtlPlugin],
   });
  
-
+  function printStartUpVariables(){
+    console.log(`process.env: ${process.env.NODE_ENV}`)
+    console.log(`urgent server url: ${process.env.REACT_APP_HOST_API_KEY}`)
+    console.log(`signalR_hub  url: ${process.env.REACT_APP_HOST_SIGNALR_KEY}`)
+  }
 
 function App(props) {
   const [isUrgentTable,setIsUrgentTable]= useState(true);
@@ -34,8 +39,9 @@ function App(props) {
 
   })
   useEffect(() => {
-
-  if ( Object.keys(props.user).length == 0) {
+    printStartUpVariables()
+  // if ( Object.keys(props.user).length == 0) {
+    if ( localStorage.getItem("kishuritUserCode") === 0) {
     setIsLoggedIn(false);
 
   }else{
@@ -52,26 +58,30 @@ function App(props) {
        <BrowserRouter>
       
         <Routes>
-          {!isLoggedIn &&(
-             <Route  path="/" element={<Login/>}/>
-          )}
-        {/* <PrivateRoute path="/UrgetTable" component={UrgetTable} /> */}
+          {/* {!isLoggedIn &&(
+             <Route  path="/UrgentScreen" element={<Login/>}/>
+          )} */}
+           
+         <Route  path="/UrgentScreen" element={<Login/>}/>
+          
+  
         {isLoggedIn &&(
           <>
           <Route  path="/UrgetTable" element={<UrgetTable/>}>
           </Route>
-          {/* <Route  path="/" element={<Login/>}>
-          </Route> */}
+         
+         
           <Route  path="/UrgentMessageChild" element={<UrgentMessageChild/>}>
           </Route>
           <Route  path="/UrgentTreatModal" element={<UrgentTreatModal/>}>
           </Route>
           </>
         )}
-        
-         <Route  path="*" element={<Navigate to={isLoggedIn ? "/UrgetTable":"/"}/>}></Route>
+       
+         {/* <Route  path="*" element={<Navigate to={isLoggedIn ? "/UrgentScreen":"/UrgetTable"}/>}></Route> */}
         </Routes>
       </BrowserRouter>
+     
     </div>
     </ThemeProvider>
     </CacheProvider>

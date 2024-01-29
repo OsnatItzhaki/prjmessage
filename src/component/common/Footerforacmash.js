@@ -19,9 +19,9 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { setIndex,setSingleMessage } from '../../redux/actions/urgentMessageChild.action';
 import Element from '../../img/element.png'
-
-
- 
+import {invokeHubProxyRowUpdated} from "../../redux/actions/hubConnection.action"
+import HomeIcon from '@mui/icons-material/Home';
+import MessageIcon from '@mui/icons-material/Message';
 
 
 var style = {
@@ -49,12 +49,18 @@ var acmash = {
 
 function Footeracmash(props ) {
     let navigate = useNavigate();
-    
+    const userCode = localStorage.getItem("kishuritUserCode");
+      const isButtonDisabled = userCode !== "10087" && userCode !== "11195" && userCode !== "22914";
     const exitMessageChild=()=>{
         let path = '/UrgetTable';
         navigate(path);
       }
-      
+      const openHomeSite=()=>{
+        window.open(props.singleMessage.HomeSite_Vch, "_blank")
+      }
+      const openChangingUrgent=()=>{
+        alert(props.singleMessage.ChangingUrgent_Vch);
+      }
       const Item = styled(Paper)(({ theme }) => ({
         padding: theme.spacing(1),
         textAlign: 'center'
@@ -95,6 +101,7 @@ function Footeracmash(props ) {
       
       navigate(-1);
       
+      
       }
       
     return (
@@ -111,11 +118,13 @@ function Footeracmash(props ) {
          
           <Button> <AutomaticWhatsAppModal /></Button>
           
-          <Button  variant="contained" onClick={noRelevant.bind(this)} endIcon={<DeleteIcon />} sx={{backgroundColor:'#6bc0b2','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}>לא רלוונטי</Button>
+          <Button  disabled={isButtonDisabled} variant="contained" onClick={noRelevant.bind(this)} endIcon={<DeleteIcon />} sx={{backgroundColor:'#6bc0b2','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}>לא רלוונטי</Button>
         
           <Button> <UrgentTreatModal  /></Button>
 
-      
+          {props.singleMessage.HomeSite_Vch!=''?<Button  variant="contained"  onClick={openHomeSite.bind(this)} endIcon={<HomeIcon />} sx={{mr:1, backgroundColor:'#aac22f','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}> אתר הבית</Button>:''}
+          {props.singleMessage.ChangingUrgent_Vch!=''?<Button  variant="contained"  onClick={openChangingUrgent.bind(this)} endIcon={<MessageIcon />} sx={{mr:1, backgroundColor:'#aac22f','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}>הודעה משתנה</Button>:''}
+          
           <Button  variant="contained"  onClick={exitMessageChild.bind(this)} endIcon={<LogoutIcon />} sx={{backgroundColor:'#aac22f','&:hover': {backgroundColor: '#e0871b',color: '#fff'}}}> יציאה</Button>
          
             </div>
@@ -130,11 +139,13 @@ export default connect(
       singleMessage:state.singleMessage.singleMessage,
       index:state.singleMessage.index,
       messages:state.messages.messages,
-      chatHubProxy:state.hub.chatHubProxy
+      chatHubProxy:state.hub.chatHubProxy,
+      user:state.user.user
     }),
     {
         setSingleMessage,
-        setIndex
+        setIndex,
+        invokeHubProxyRowUpdated,
     }
   )(Footeracmash) ;
   

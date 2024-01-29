@@ -31,6 +31,7 @@ import IconButton from '@mui/material/IconButton';
 import { alignProperty } from '@mui/material/styles/cssUtils';
 import { useNavigate  } from 'react-router-dom';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import Draggable from 'react-draggable';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -85,6 +86,7 @@ const style = {
     );
   };
   const sendMultiplePhone = () => {
+    try{
       let messageCode =props.singleMessage.MessageCode_Vch
       let clientCode =props.singleMessage.ClientCode_Int
       let userCode=props.user.userCode
@@ -108,10 +110,16 @@ const style = {
           status: "success",
           msg: "ההודעה תשלח ללקוח"        
       });
-    }
-    props.setSingleMessage(result.data);
+      props.setSingleMessage(result.data);
     props.invokeHubProxyRowUpdated(props.singleMessage.MessageCode_Vch);
-  })
+  
+    }
+    })
+}
+catch(e)
+{
+
+}
 }
 
   
@@ -201,6 +209,7 @@ const style = {
                 alertMessage={alertMessage}
                 setAlertMessage={setAlertMessage}
             />
+              <Draggable>
         <Box dir="rtl" sx={style}>
         <Grid  container spacing={2}  direction="column"
   alignItems="center"
@@ -262,7 +271,7 @@ const style = {
     
          
     </Box>
-    
+    </Draggable>
     
     
     </></Modal>

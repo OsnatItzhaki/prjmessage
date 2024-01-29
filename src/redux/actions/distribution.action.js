@@ -15,6 +15,8 @@ export function fetchDistributionType(){
         dispatch(setDistributionType(types));
     }
 }
+
+
 export function setTreatDistribution(rows){
     return {
         type:SET_TREAT_DISTRIBUTION,

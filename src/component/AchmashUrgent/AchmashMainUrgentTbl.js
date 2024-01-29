@@ -14,8 +14,8 @@ import { styled } from '@mui/material/styles';
 import { setMessages,setMessagesByMessageCode } from "../../redux/actions/mainUrgentTable.action";
 import {fetchMessages} from "../../redux/actions/mainUrgentTable.action";
 import{ setSingleMessage,setIndex} from "../../redux/actions/urgentMessageChild.action"
-import {setChatHubProxy} from "../../redux/actions/hubConnection.action"
-import {setconnectedusers} from "../../redux/actions/login.action"
+import {setChatHubProxy,setlocalconnection} from "../../redux/actions/hubConnection.action"
+import {setconnectedusers,setconnectId} from "../../redux/actions/login.action"
 import {connect} from 'react-redux' ;//כך מחברים את הקומפוננטה לstate
 import { datediffToSec,convertSecToTime} from '../functions/commonFunction'
 import { format } from 'date-fns';
@@ -35,8 +35,9 @@ import Element from '../../img/element.png'
 const [chatHubProxy, SetChatHubProxy] = useState(null);
 const [connection, SetConnection] = useState(null);
 const [chatMessage, SetChatMessage] = useState("");  
-const [chatHistory, SetChatHistory] = useState("");
-
+const [flagConnectAgain, SetflagConnectAgain] = useState(0);
+const message = props.messages.filter(m => m.Handled_Bit===false)
+const messageNotTreat = message.length
 let navigate = useNavigate();
 
   //functions
@@ -55,19 +56,94 @@ let navigate = useNavigate();
     }
     return timeDiffFormat;
 }
-  function Send() {//to do update actions
-    chatHubProxy.invoke('SendToWinForm', "Web", chatMessage).done(function () {
-      SetChatHistory(prevChat => prevChat !== "" ? (prevChat + "\nWeb :" + chatMessage) : ("\nWeb :" + chatMessage));
-    }).fail(function (error) {
-      console.log('Invocation failed. Error: ' + error);
-    });
-  }
+  
 
 
   useEffect(() => {
     Connect();
   },[])
+  async function ConnectChat(username) {
+    
+    try {
+    console.log("ConnectChat1")
+     const HOST_SIGNALR = process.env.REACT_APP_HOST_SIGNALR_KEY || '';
+      
+      let localConnection = window.$.hubConnection(`${HOST_SIGNALR}`);
+     localConnection.qs = { 'version': '1.0' };
+      var hubProxy = localConnection.createHubProxy('chathub');
+      hubProxy.on('SendNewRecords', function (eventName, data) {
+       
+       props.setMessages(data);
+     });
+     hubProxy.on('SendUpdatedRow', function (eventName, data) {
+       
+       props.setMessagesByMessageCode(data);
+ 
+     });
+     hubProxy.on('SendConnectedUserListl', function (data) {
+       console.log("SendConnectedUsers");
+       props.setconnectedusers(data);
+ 
+     });
+      
+     console.log("ConnectChat2");
+      await localConnection.start()
+      .done(function () { props.setconnectId({ConnectionId : localConnection.id, UserName : username });
+        console.log('Now connected, connection ID=' + localConnection.id); })
+      .fail(function () { console.log('Could not connect'); });
+      console.log("ConnectChat3");
+      await hubProxy.invoke('Connect', username).done(function () {
+       console.log('Invocation Succsed');
+      }).fail(function (error) {
+        console.log('Invocation failed. Error: ' + error);
+      });
+      console.log("ConnectChat4");
+      await hubProxy.invoke('UserConnect','','').done(function () {
+       console.log('Invocation UserConnect Succsed');
+      }).fail(function (error) {
+        console.log('Invocation failed. Error: ' + error);
+      });
+      ///
+      
+     console.log("hubProxyReconnect",hubProxy);
+     console.log("localConnectionReconnect",localConnection);
+     await props.setChatHubProxy(hubProxy);
+     await props.setlocalconnection(localConnection);
+     SetflagConnectAgain(flagConnectAgain+1);
+    } catch (error) {
+      alert("נא לסגור את המערכת ולבצע כניסה בשנית "+"שגיאה: " +error);
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    console.log("useeffect localconnection",props.localconnection);
+console.log("localconnection:", props.localconnection);
+ 
+    props.localconnection.disconnected(function() {
+      console.log("מתחבר שוב");
+      ConnectChat(props.user.userName);
+      console.log("after ConnectChat")
+  });
 
+  },[flagConnectAgain])
+
+
+
+
+  // useEffect(() => {
+  //   window.addEventListener("beforeunload", refresh);
+  //   return () => {
+  //     window.removeEventListener("beforeunload", refresh);
+  //   };
+  // }, []);
+  // const refresh = (e) => {
+  //   alert("Osnat");
+  //   e.preventDefault();
+  //  // e.returnValue = "";
+    
+  //   navigate("/UrgetTable");
+    
+  // };
 
    async function Connect () {
      try{
@@ -82,15 +158,7 @@ let navigate = useNavigate();
     
   }
 
- async function logOut() 
- {
-  await props.chatHubProxy.invoke('disConnect', props.ConnectionId.ConnectionId).done(function () {
-    console.log('Invocation disConnect Succsed');
-   }).fail(function (error) {
-     console.log('Invocation disConnect failed. Error: ' + error);
-   });
-  window.location.href = '/';
- }
+ 
    const handleClickRow =(index)=>
   {
     
@@ -118,6 +186,7 @@ let navigate = useNavigate();
      
     }
   }
+
   const Item = styled(Paper)(({ theme }) => ({
     // backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     // ...theme.typography.body2,
@@ -125,7 +194,7 @@ let navigate = useNavigate();
     textAlign: 'center',
     // color: theme.palette.text.secondary,
   }));
-  
+ 
   /////end function
   return (
     
@@ -142,7 +211,7 @@ let navigate = useNavigate();
   {hasTretmentPriority()? <div class="animate-flicker">
 <p>שימו לב לקדימות דחופים<WarningAmberIcon style={{ color: "#e0871b" ,fontSize: "35px"}}  /></p></div>:'' } 
   
-
+<h5 style={{backgroundColor:'#e0871b'}}>סה"כ הודעות ללא טיפול:{messageNotTreat}</h5>
   
   
   
@@ -158,9 +227,10 @@ let navigate = useNavigate();
   </Grid>
         
         </div>
-      
+        
         <Grid container spacing={2}  >
         <Grid item xs={10} >
+        
         <Paper sx={{ width: '100%', overflow: 'hidden ' }} style={{backgroundImage: `url(${Element})`,backgroundPosition: ('center center'),backgroundRepeat: ('no-repeat'), backgroundsize: 'cover', backgroundSize:'contain'}}>
       <TableContainer sx={{ maxHeight: 650 }} >
       <Table  size='small' sx={{ minWidth: 700 }} stickyHeader aria-label="sticky table" >
@@ -197,7 +267,7 @@ let navigate = useNavigate();
             <TableRow
               key={row.MessageCode_Vch}
              
-              sx={{background:row.TreatmentPriority_Bit&&!row.Handled_Bit?'#aac22f':'', '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{background:row.TreatmentPriority_Bit&&!row.Handled_Bit?'#f60000':'', '&:last-child td, &:last-child th': { border: 0 } }}
               onClick={handleClickRow.bind(this,index)}
               
             >
@@ -219,6 +289,7 @@ let navigate = useNavigate();
      
     <Grid container spacing={3} >
     <Grid item xs={12} >
+    <Button sx={{ mx: "auto", ml:'10px',fontSize: 15, color:"#e0871b"}} onClick={Connect} variant="outlined" size="medium" color="error" > רענן נתונים </Button>
     <h6 style={{ padding: "20px 1px 5px 25px"}}> משתמשים המחוברים כעת למערכת</h6>
     
   </Grid>
@@ -246,7 +317,9 @@ export default connect(
     chatHubProxy:state.hub.chatHubProxy,
     user:state.user.user,
     connectedUser:state.login.ConnectedUsers,
-    ConnectionId:state.login.ConnectionId
+    ConnectionId:state.login.ConnectionId,
+    localconnection:state.hub.localconnection,
+
   }),
   {
     fetchMessages,
@@ -254,7 +327,10 @@ export default connect(
     setSingleMessage,
     setIndex,
     setChatHubProxy,
+    setlocalconnection,
     setMessagesByMessageCode,
     setconnectedusers,
+    setconnectId
   }
 )(UrgetTable) ;
+

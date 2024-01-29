@@ -31,6 +31,11 @@ class automaticSendingService{
               }).then(function(response) {
                 responseObj={iserror:false,data:response.data}
             }).catch(function (error) {
+              //alert("error in automaticSendingService_insertMultipleAutomaticSending:"+error.response.data.ExceptionMessage);
+              if((error.response.data.ExceptionMessage).includes('duplicate key'))
+              {
+                alert("לא ניתן לבחור את אותו נייד פעמיים מהרשימה, יש להקליד מספר נייד בתיבת נייד חופשי");
+              }
                 if (error.response) {
                   // Request made and server responded
                   responseObj={iserror:true,data:"data:"+error.response.data+",status:"+error.response.status+",headers:"+error.response.headers}

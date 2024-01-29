@@ -13,13 +13,14 @@ import loginService from '../../services/login.service';
 import Loading from '../common/Loading';
 import { useNavigate  } from 'react-router-dom';
 import {setuser} from "../../redux/actions/user.action"
-import {setChatHubProxy} from "../../redux/actions/hubConnection.action"
+import {setChatHubProxy,setlocalconnection} from "../../redux/actions/hubConnection.action"
 import {setconnectedusers,setconnectId} from "../../redux/actions/login.action"
 import { setMessages,setMessagesByMessageCode } from "../../redux/actions/mainUrgentTable.action";
 import {connect} from 'react-redux' ;
 import Header from '../common/header';
 import Footer1 from '../common/footer';
 import Element2 from '../../img/element2.png'
+import { HubConnectionBuilder, LogLevel,HttpTransportType } from '@microsoft/signalr';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,14 +54,9 @@ function Login(props) {
     let navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [chatHubProxy, SetChatHubProxy] = useState(null);
-const [connection, SetConnection] = useState(null);
-
   const [errorUsername, setErrorUsername] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
-
   const [alertMessage, setAlertMessage] = useState({ isOpen: false, status: "error", msg: "" })
-
   const [isButtonDisable, setIsButtonDisable] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -89,10 +85,14 @@ const [connection, SetConnection] = useState(null);
       username,
       password
     });
+    
    
         setIsButtonDisable(false);
         setLoading(false);
       if(result.iserror) {
+
+        localStorage.setItem("kishuritUserCode", 0)
+
         setAlertMessage({
           isOpen: true,
           status: "error",
@@ -103,7 +103,9 @@ const [connection, SetConnection] = useState(null);
       else{
       
        props.setuser(result.data);
-    
+       localStorage.setItem("kishuritUserName", result.data.userName)
+       localStorage.setItem("kishuritUserCode", result.data.userCode)
+ 
       await Connect(result.data.userName);
       let path = '/UrgetTable';
       navigate(path);
@@ -115,16 +117,21 @@ const [connection, SetConnection] = useState(null);
    
     
    try {
+///
+   
+    // const connection = new HubConnectionBuilder()
+    // .withUrl("https://localhost:44353/chat")
+    // .configureLogging(LogLevel.Information)
+    // .build();
+   
     const HOST_SIGNALR = process.env.REACT_APP_HOST_SIGNALR_KEY || '';
-     
-      let localConnection = window.$.hubConnection(`${HOST_SIGNALR}`);
-     localConnection.qs = { 'version': '1.0' };
+     //debugger;
+     let localConnection = window.$.hubConnection(`${HOST_SIGNALR}`);
+    localConnection.qs = { 'version': '1.0' };
      var hubProxy = localConnection.createHubProxy('chathub');
      hubProxy.on('SendNewRecords', function (eventName, data) {
       
       props.setMessages(data);
-      
-      //SetChatHistory(prevChat => prevChat !== "" ? (prevChat + "\n" + eventName + ":" + data) : (eventName + ":" + data));
     });
     hubProxy.on('SendUpdatedRow', function (eventName, data) {
       
@@ -143,7 +150,7 @@ const [connection, SetConnection] = useState(null);
        console.log('Now connected, connection ID=' + localConnection.id); })
      .fail(function () { console.log('Could not connect'); });
     
-     //SetConnection(localConnection);
+    //SetConnection(localConnection);
     
      await hubProxy.invoke('Connect', username).done(function () {
       console.log('Invocation Succsed');
@@ -155,12 +162,30 @@ const [connection, SetConnection] = useState(null);
      }).fail(function (error) {
        console.log('Invocation failed. Error: ' + error);
      });
-     /////
+     ///
      
-    console.log(hubProxy);
+    console.log("hubProxy",hubProxy);
+    console.log("localConnection",localConnection);
     await props.setChatHubProxy(hubProxy);
+    await props.setlocalconnection(localConnection);
      /////
-     
+    //  await localConnection.disconnected()
+    //  .done(function () {  console.log("מתחבר שוב");
+    //                      localConnection.start()
+    //                     .done(function () { props.setconnectId({ConnectionId : localConnection.id, UserName : username });
+    //                       console.log('Now connected again, connection ID=' + localConnection.id); })
+    //                     .fail(function () { console.log('Could not connect'); });
+    //  })
+    //  .fail(function () { console.log(" לא יכול להתחבר שוב"); });
+
+
+
+  //    localConnection.disconnected(function() {
+  //      console.log("מתחבר שוב");
+  //     setTimeout(function() {
+  //       localConnection.start();
+  //     }, 2000); // Re-start connection after 5 seconds
+  // });
    } catch (error) {
      alert(error);
      console.log(error);
@@ -253,10 +278,11 @@ export default connect(
     {
       setMessages,
       setMessagesByMessageCode,
-      setChatHubProxy,
       setconnectedusers,
       setuser,
       setconnectId,
+      setChatHubProxy,
+      setlocalconnection,
     }
   )(Login) ;
 // Login.propTypes = {

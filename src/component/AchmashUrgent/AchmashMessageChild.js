@@ -17,7 +17,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Header from "../common/header";
 import Footeracmash from "../common/Footerforacmash";
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert, { AlertProps } from '@mui/material/Alert';
 
 
  function UrgentMessageChild(props)
@@ -27,8 +28,11 @@ import Footeracmash from "../common/Footerforacmash";
   //const { state } = useLocation();
   const [iframeforModal,setiframeforModal]=useState('');
   const [messageforModal,setmessageforModal]=useState('');
-  function createData(clientname, clientnumber, messagecodecust, date, employename,urgenttreatname) {
-    return { clientname, clientnumber, messagecodecust, date, employename,urgenttreatname };
+  function createData(clientname, clientnumber, messagecodecust, date, employename,urgenttreatname,MessageTime) {
+    return { clientname, clientnumber, messagecodecust, date, employename,urgenttreatname,MessageTime };
+  }
+  function createRandomUrlPathParam() {
+    return `?random=" + ${(new Date()).getTime() + Math.floor(Math.random() * 1000000)}`;
   }
   const rows = [
     createData(props.singleMessage.ClientName_Vch, 
@@ -36,22 +40,32 @@ import Footeracmash from "../common/Footerforacmash";
     props.singleMessage.MessageCodeCust, 
     format(new Date(props.singleMessage.OpeningDate_Dat),'dd/MM/yyyy HH:mm:ss'), 
     props.singleMessage.EmployeName_Int,
-    props.singleMessage.urgentTreatName)
+    props.singleMessage.urgentTreatName,
+    props.singleMessage.MessageTime)
     
    
   ];
   
 
-   useEffect(() => {
-
+   useEffect(() => { //כללית הנדסה רפואית בע"מ	2144
+    //	2144/24/01/2/1724	29/01/2024 16:14:12	יפה.פ	אבלגון עדינה	06:13
+    // number of message: 2144/24/01/2/1724
+    //\\10.0.0.115\CustomerWebDoc_web\2144
+    console.log(`iframe url: ${props.singleMessage.urgentlines}`)
     const init =  () => {
-      setiframeforModal('<iframe height="100%" width="100%"  src='+props.singleMessage.urgentlines+ ' />');
+      setiframeforModal('<iframe height="100%" width="100%"  src='+props.singleMessage.urgentlines+ createRandomUrlPathParam()+' />');
       setmessageforModal(props.singleMessage.MessageText_Txt+props.singleMessage.InternalMessage_txt+ props.singleMessage.ExtraMessage_Vch);
     }
-  
+    const alertChangingWindows =  () => {
+      if(props.singleMessage.ChangingUrgent_Vch!='')
+        alert(props.singleMessage.ChangingUrgent_Vch);
+        
+    }
     init()
+    alertChangingWindows()
    
-  }, [props.singleMessage])
+  }, [props.singleMessage.MessageCode_Vch])
+ 
 
    
 
@@ -74,6 +88,7 @@ return (
             <TableCell align="center" style={{fontWeight:'bold'}}>תאריך</TableCell>
             <TableCell align="center" style={{fontWeight:'bold'}}>מוקדן</TableCell>
             <TableCell align="center" style={{fontWeight:'bold'}}>מטפל בדחוף</TableCell>
+            <TableCell align="center" style={{fontWeight:'bold'}}>משך שיחה</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,7 +105,7 @@ return (
               <TableCell align="center">{row.date}</TableCell>
               <TableCell align="center">{row.employename}</TableCell>
               <TableCell align="center">{row.urgenttreatname}</TableCell>
-           
+              <TableCell align="center">{row.MessageTime}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -124,8 +139,8 @@ return (
           {/* <iframe src="http://10.0.0.115/CustomerWebDoc/2147/2147.htm" */}
           {/* <iframe src={props.singleMessage.urgentlines}
            height="300px" width="100%" /> */}
-  
-          {props.singleMessage.urgentlines.includes('.htm')||props.singleMessage.urgentlines.includes('.html')||props.singleMessage.urgentlines.includes('.mht')||props.singleMessage.urgentlines.includes('.mhtml')?<iframe src={props.singleMessage.urgentlines} height="300px" width="100%" /> :<div  dangerouslySetInnerHTML={{ __html: props.singleMessage.urgentlines}}></div>}
+          
+          {props.singleMessage.urgentlines.includes('.htm')||props.singleMessage.urgentlines.includes('.html')||props.singleMessage.urgentlines.includes('.mht')||props.singleMessage.urgentlines.includes('.mhtml')?<iframe src={props.singleMessage.urgentlines + createRandomUrlPathParam()} height="300px" width="100%" /> :<div  dangerouslySetInnerHTML={{ __html: props.singleMessage.urgentlines + createRandomUrlPathParam()}}></div>}
            
         </div>
       </div>

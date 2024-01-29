@@ -18,7 +18,7 @@ import {useState,useEffect} from 'react'
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
-
+import Draggable from 'react-draggable';
 
 
 const ITEM_HEIGHT = 48;
@@ -183,6 +183,7 @@ const style = {
                 alertMessage={alertMessage}
                 setAlertMessage={setAlertMessage}
             />
+            <Draggable>
         <Box dir="rtl" sx={style}>
         <Grid  container spacing={2}  direction="column"
   alignItems="center"
@@ -245,7 +246,7 @@ const style = {
          
     </Box>
     
-    
+   </Draggable>
     
     </></Modal>
           </div>

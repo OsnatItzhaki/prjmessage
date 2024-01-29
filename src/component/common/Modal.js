@@ -12,7 +12,7 @@ const style = {
   position: 'absolute',
   top: '10%',
   height: '75%',  
-  width: '50%',
+  width: '70%',
    mx:60,
  
   bgcolor: 'background.paper',

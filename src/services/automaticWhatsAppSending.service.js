@@ -31,19 +31,12 @@ class automaticWhatsAppSendingService{
               }).then(function(response) {
                 responseObj={iserror:false,data:response.data}
             }).catch(function (error) {
-                if (error.response) {
-                  // Request made and server responded
-                  responseObj={iserror:true,data:"data:"+error.response.data+",status:"+error.response.status+",headers:"+error.response.headers}
-                  return responseObj;
-                } else if (error.request) {
-                  // The request was made but no response was received
-                  responseObj={iserror:true,data:error.request}
-                  return responseObj;
-                } else {
-                  // Something happened in setting up the request that triggered an Error
-                  responseObj={iserror:true,data:error.message}
-                  return responseObj;
-                }
+              alert("error in automaticWhatsAppSendingService_insertMultipleAutomaticSending:"+error.response.data.ExceptionMessage);
+              if (error.response) {
+                // Request made and server responded
+                responseObj={iserror:true,data:"data:"+error.response.data.ExceptionMessage+",status:"+error.response.status}
+                
+              }
             
               });
               return  responseObj ;

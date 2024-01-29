@@ -125,6 +125,14 @@ const deleteAllDistributionItems=(event)=>{
   
     return Isdistribution
  }
+ const HasReason=()=>{
+  let Isdistribution=false;
+  if(reasonNotConnection==='')
+    return false;
+ else
+    return true;
+  
+ }
   const save = () => {
     let timer=minutes*60+seconds;
     let isTreat=switchState.treat;
@@ -132,13 +140,22 @@ const deleteAllDistributionItems=(event)=>{
     let messageCode=props.singleMessage.MessageCode_Vch;
     let disributionDetails=data;
     let notConnectionReason=reasonNotConnection
-    let validDist=isConnection?HasDistribution():true;
-    if(validDist===false)
+    let validDist=isConnection?HasDistribution():HasReason();
+    if(validDist===false&&isConnection)
     {
       setAlertMessage({
         isOpen: true,
         status: "error",
         msg: "נוצר קשר, אך אין פירוט אמצעי הפצה"
+    });
+    return;
+  }
+    if(validDist===false&&isConnection===false)
+    {
+      setAlertMessage({
+        isOpen: true,
+        status: "error",
+        msg:"לא נוצר קשר, ואין סיבה לאי יצירת קשר"
     });
     return;
 
@@ -320,6 +337,8 @@ const deleteAllDistributionItems=(event)=>{
           <TextField defaultValue={props.singleMessage.NoConectionReason_Vch} disabled={switchState.connection} multiline rows={2} fullWidth label="סיבה לאי יצירת קשר" name="reasonNotConnection" onChange={handleChangeText}/>
           </Grid>
           </Grid>
+         
+
          
     </Box>
     

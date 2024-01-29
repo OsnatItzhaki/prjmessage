@@ -35,26 +35,26 @@ function Footer1( ) {
             <div style={style}>
         
  
-   <div class="container" >
-  <div class="row justify-content-md-center">
-    <div class="col col-sm-2">
+   <div className="container" >
+  <div className="row justify-content-md-center">
+    <div className="col col-sm-2">
     <a href="" style={{pb:'10px'}}><img src={K1} /></a>    </div>
-    <div class="col-sm-2">
+    <div className="col-sm-2">
     <a href="" style={{pb:'10px'}}><img src={K2} /></a>
     </div>
-    <div class="col col-sm-2">
+    <div className="col col-sm-2">
     <a href="" style={{pb:'10px'}}><img src={K3} /></a>  
     </div>
-    <div class="col col-sm-2">
+    <div className="col col-sm-2">
     <a href="" style={{pb:'10px'}}><img src={K4} /></a>
     </div>
   </div>
-  <div class="footer-top-border color1"> </div>
-	<div class="footer-top-border color2"> </div>
-	<div class="footer-top-border color3"> </div>
-	<div class="footer-top-border color4"> </div>
-	<div class="footer-top-border color5"> </div>	 
-	<div class="footer-top-border color6"> </div>
+  <div className="footer-top-border color1"> </div>
+	<div className="footer-top-border color2"> </div>
+	<div className="footer-top-border color3"> </div>
+	<div className="footer-top-border color4"> </div>
+	<div className="footer-top-border color5"> </div>	 
+	<div className="footer-top-border color6"> </div>
 
   </div>
   </div>
